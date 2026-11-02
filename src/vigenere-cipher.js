@@ -1,33 +1,44 @@
-const { NotImplementedError } = require('../lib');
+const { NotImplementedError } = require("../lib");
 
-/**
- * Implement class VigenereCipheringMachine that allows us to create
- * direct and reverse ciphering machines according to task description
- *
- * @example
- *
- * const directMachine = new VigenereCipheringMachine();
- *
- * const reverseMachine = new VigenereCipheringMachine(false);
- *
- * directMachine.encrypt('attack at dawn!', 'alphonse') => 'AEIHQX SX DLLU!'
- *
- * directMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => 'ATTACK AT DAWN!'
- *
- * reverseMachine.encrypt('attack at dawn!', 'alphonse') => '!ULLD XS XQHIEA'
- *
- * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
- *
- */
 class VigenereCipheringMachine {
-  encrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  constructor(isDirect = true) {
+    this.isDirect = isDirect;
   }
 
-  decrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  encrypt(message, key) {
+    if (message === undefined || key === undefined) {
+      throw new Error("Incorrect arguments!");
+    }
+    return this.process(message, key, true);
+  }
+
+  decrypt(message, key) {
+    if (message === undefined || key === undefined) {
+      throw new Error("Incorrect arguments!");
+    }
+    return this.process(message, key, false);
+  }
+
+  process(message, key, isEncrypt) {
+    const msgUpper = message.toUpperCase();
+    const keyUpper = key.toUpperCase();
+    let result = "";
+    let keyIndex = 0;
+
+    for (let i = 0; i < msgUpper.length; i++) {
+      const charCode = msgUpper.charCodeAt(i);
+      if (charCode >= 65 && charCode <= 90) {
+        const m = charCode - 65;
+        const k = keyUpper.charCodeAt(keyIndex % keyUpper.length) - 65;
+        const code = isEncrypt ? (m + k) % 26 : (m - k + 26) % 26;
+        result += String.fromCharCode(code + 65);
+        keyIndex++;
+      } else {
+        result += msgUpper[i];
+      }
+    }
+
+    return this.isDirect ? result : result.split("").reverse().join("");
   }
 }
 
