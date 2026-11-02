@@ -1,21 +1,9 @@
-const { NotImplementedError } = require('../lib');
+const { NotImplementedError } = require("../lib");
 
-/**
- * Given a string, return its encoding version.
- *
- * @param {String} str
- * @return {String}
- *
- * @example
- * For aabbbc should return 2a3bc
- *
- */
-
-function encodeLine(/* str */) {
-  // Remove line below and write your code here
-  throw new NotImplementedError('Not implemented');
+function encodeLine(str) {
+  return str.replace(/(.)\1+/g, (match) => match.length + match[0]);
 }
 
 module.exports = {
-  encodeLine
+  encodeLine,
 };
